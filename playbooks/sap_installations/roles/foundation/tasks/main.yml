@@ -30,7 +30,7 @@
 - name: Copy SWPM media
   tags: copy,media,swpm
   copy:
-    src: /home/ansible/medias/installations/SWPM/SWPM.SAR
+    src: ~/medias/installations/SWPM/SWPM.SAR
     dest: /usr/sap/scratch/SWPM
     mode: 0777
     owner: root
@@ -39,7 +39,7 @@
 - name: Copy SAPCAR executable
   tags: copy,media,sapcar
   copy:
-    src: /home/ansible/medias/installations/Utilities/SAPCAR
+    src: ~/medias/installations/Utilities/SAPCAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root
@@ -48,7 +48,7 @@
 - name: Copy SAPHostAgent
   tags: copy,media,saphostagent
   copy: 
-    src: /home/ansible/medias/installations/SWPM/SAPHOSTAGENT.SAR
+    src: ~/medias/installations/SWPM/SAPHOSTAGENT.SAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root

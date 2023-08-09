@@ -4,7 +4,7 @@
 
 - name: Copy WebDispatcher media
   copy:
-    src: /home/ansible/medias/installations/WebDispatcher/WEBDISP.SAR
+    src: ~/medias/installations/WebDispatcher/WEBDISP.SAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root
