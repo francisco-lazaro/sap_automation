@@ -2,12 +2,10 @@
 
 - hosts: all
   become: true
-  tags: foundation
   roles:
-    - foundation
+    - FOUNDATION
 
 - hosts: webdispatchers
   remote_user: root
-  tags: webdispatcher
   roles:
-    - webdispatchers
+    - WEBDISPATCHER

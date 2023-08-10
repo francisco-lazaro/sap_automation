@@ -2,7 +2,6 @@
 
 - hosts: all
   become: true
-    #method: sudo
   roles:
     - FOUNDATION
 
@@ -29,7 +28,7 @@
 - hosts: sap_po_ase
   become: true
   roles:
-    - SAPNW75_JAVA_ASE
+    - SAP_PO75_ASE
 
 - hosts: solman72_ase
   become: true
