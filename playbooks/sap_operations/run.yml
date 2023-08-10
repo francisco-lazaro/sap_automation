@@ -1,11 +1,15 @@
 ---
 
-- hosts: all
-  become: true
-  roles:
-    - FOUNDATION
-
 - hosts: webdispatchers
+  gather_facts: no
   remote_user: root
   roles:
-    - WEBDISPATCHER
+    - role: WEBDISPATCHER
+      sidadm: '{{SID|lower}}adm'
+
+- hosts: as_abap
+  gather_facts: no
+  remote_user: root
+  roles:
+    - role: AS_ABAP
+      sidadm: '{{SID|lower}}adm'

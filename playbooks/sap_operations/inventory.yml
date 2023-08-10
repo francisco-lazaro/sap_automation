@@ -2,12 +2,23 @@ webdispatchers:
   hosts:
     managed1:
       ansible_host: 192.168.0.7
-      SID: wix
-      INST: 88
+      SID: WWX
+      AS: 88
     managed2:
       ansible_host: 192.168.0.13
-      SID: wwz
-      INST: 89
+      SID: WWZ
+      AS: 89
 
-
+as_abap:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+      SID: WDD
+      AS: 00
+      ASCS: 01
+    managed2:
+      ansible_host: 192.168.0.13
+      SID: WDB
+      AS: 78
+      ASCS: 05
 

@@ -1,0 +1,30 @@
+  
+- name: Stop Application Server instance
+  tags: stop,stop_as,stop_sap,restart_sap
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: sapcontrol -nr {{AS}} -function Stop
+
+- name: Stop Central Services instance
+  tags: stop__,stop_ascs__,stop_sap__,restart_sap__
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: sapcontrol -nr {{ASCS}} -function Stop && sleep 5
+
+- name: Cleanup memory segments
+  tags: stop,stopsap,restart_sap
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: cleanipc all remove
+
+- name: Start Central Services instance
+  tags: start__,start_ascs__,restart_sap__
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: sapcontrol -nr {{ASCS}} -function Start
+
+- name: Start Application Server Instance
+  tags: start,start_as,restart_sap
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: sapcontrol -nr {{AS}} -function Start

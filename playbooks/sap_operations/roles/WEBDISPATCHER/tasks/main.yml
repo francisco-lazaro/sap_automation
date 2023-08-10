@@ -1,11 +1,11 @@
 - name: Stop WebDispatcher
-  tags: webdispatcher_stop,stop
-  remote_user: '{{SID}}adm'
+  tags: stop,stop_webdisp
+  remote_user: '{{sidadm}}'
   ansible.builtin.shell:
-    cmd: 'sapcontrol -nr {{INST}} -function Stop'
+    cmd: 'sapcontrol -nr {{AS}} -function Stop'
 
 - name: Start WebDispatcher
-  tags: webdispatcher_start,start
-  remote_user: '{{SID}}adm'
+  tags: start,start_webdisp
+  remote_user: '{{sidadm}}'
   ansible.builtin.shell:
-    cmd: 'sapcontrol -nr {{INST}} -function Start'
+    cmd: 'sapcontrol -nr {{AS}} -function Start'

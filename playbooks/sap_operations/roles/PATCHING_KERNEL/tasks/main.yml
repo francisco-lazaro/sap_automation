@@ -1,0 +1,89 @@
+
+- name: Backup running kernel
+  tags: kernel_prep,kernel_update
+  remote_user: '{{sidadm}}'
+  copy:
+    src: '{{kernel_path}}'
+    dest: '{{kernel_new}}'
+    remote_src: yes
+  
+- name: Copy SAPEXE SAR file
+  tags: kernel_prep,kernel_update
+  remote_user: '{{sidadm}}'
+  copy: 
+    src: ~/medias/updates/kernel/SAPEXE.SAR
+    dest: '{{kernel_new}}'
+    owner: '{{sidadm}}'
+    mode: 0777
+
+- name: Copy SAPEXEDB SAR file
+  tags: kernel_prep,kernel_update
+  remote_user: '{{sidadm}}'
+  copy:
+    src: ~/medias/updates/kernel/SAPEXEDB.SAR
+    dest: '{{kernel_new}}'
+    owner: '{{sidadm}}'
+    mode: 0777
+
+- name: Copy dw* SAR file
+  tags: kernel_prep,kernel_update
+  remote_user: '{{sidadm}}'
+  copy:
+    src: ~/medias/updates/kernel/dw.sar
+    dest: '{{kernel_new}}'
+    owner: '{{sidadm}}'
+    mode: 0777
+
+- name: Copy lib* SAR file
+  tags: kernel_prep,kernel_update
+  remote_user: '{{sidadm}}'
+  copy:
+    src: ~/medias/updates/kernel/lib.sar
+    dest: '{{kernel_new}}'
+    owner: '{{sidadm}}'
+    mode: 0777
+
+- name: Uncompress SAPEXE patch files
+  tags: kernel_prep,kernel_update,kernel_uncompress
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:
+    cmd: SAPCAR -xvf {{kernel_new}}/SAPEXE.SAR -R {{kernel_new}}
+
+- name: Uncompress SAPEXEDB kernel patch files
+  tags: kernel_prep,kernel_update,kernel_uncompress
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:    
+    cmd: SAPCAR -xvf {{kernel_new}}/SAPEXEDB.SAR -R {{kernel_new}}
+
+- name: Uncompress DW patch files
+  tags: kernel_prep,kernel_update,kernel_uncompress
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:      
+    cmd: SAPCAR -xvf {{kernel_new}}/dw.sar -R {{kernel_new}}
+  
+- name: Uncompress LIB patch files
+  tags: kernel_prep,kernel_update,kernel_uncompress
+  remote_user: '{{sidadm}}'
+  ansible.builtin.shell:      
+    cmd: SAPCAR -xvf {{kernel_new}}/lib.sar -R {{kernel_new}} 
+
+- name: Patch kernel
+  tags: kernel_update
+  remote_user: '{{sidadm}}'
+  copy:
+    src: '{{kernel_path}}'
+    dest: '{{kernel_old}}'
+    remote_src: yes
+  copy:
+    src: '{{kernel_new}}'
+    dest: '{{kernel_path}}'
+    remote_src: yes
+
+
+- name: Restart SAP application
+  tags: kernel_update
+  ansible.builtin.include_role:
+    name: AS_ABAP
+    apply:
+      tags:
+        - restart_sap

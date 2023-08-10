@@ -1,0 +1,11 @@
+---
+
+- hosts: as_abap
+  gather_facts: no
+  remote_user: root
+  roles:
+    - role: PATCHING_KERNEL
+      sidadm: '{{SID|lower}}adm'
+      kernel_path: '/sapmnt/{{SID}}/exe/uc/linuxx86_64'
+      kernel_new: '/sapmnt/{{SID}}/exe/uc/linuxx86_64_new'
+      kernel_old: '/sapmnt/{{SID}}/exe/uc/linuxx86_64_old'

@@ -1,4 +1,0 @@
-- name: Install sshpass library 
-  zypper:
-    name: sshpass
-    state: latest
