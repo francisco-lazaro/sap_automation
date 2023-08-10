@@ -2,10 +2,37 @@
 
 - hosts: all
   become: true
+    #method: sudo
   roles:
-    - foundation
+    - FOUNDATION
 
 - hosts: webdispatchers
   become: true
   roles:
-    - webdispatchers
+    - WEBDISPATCHER
+
+- hosts: hana_cockpit
+  become: true
+  roles:
+    - HANA_COCKPIT
+
+- hosts: s4hana_as
+  become: true
+  roles:
+    - S4HANA_2022_AS
+
+- hosts: s4hana_db
+  become: true
+  roles:
+    - S4HANA_2022_DB
+
+- hosts: sap_po_ase
+  become: true
+  roles:
+    - SAPNW75_JAVA_ASE
+
+- hosts: solman72_ase
+  become: true
+  roles:
+    - SOLMAN72_ABAP_ASE
+    - SOLMAN72_JAVA_ASE

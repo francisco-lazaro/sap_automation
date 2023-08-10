@@ -1,0 +1,41 @@
+hana_cockpit:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13
+
+webdispatchers:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13
+
+s4hana_as:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13
+
+s4hana_db:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13
+
+sap_po_ase:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13
+
+solman72_ase:
+  hosts:
+    managed1:
+      ansible_host: 192.168.0.7
+    managed2:
+      ansible_host: 192.168.0.13

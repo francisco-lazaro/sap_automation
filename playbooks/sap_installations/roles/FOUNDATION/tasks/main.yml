@@ -3,7 +3,7 @@
 ##################################################################################
 
 - name: Create SAP main folder /usr/sap/
-  tags: mkdir,create,directory
+  tags: swpm1,swpm2,webdispatcher,hanacockpit
   file:
     path: /usr/sap/
     state: directory
@@ -13,42 +13,65 @@
     recurse: yes
 
 - name: Create media folder /usr/sap/scratch
-  tags: mkdir,create,directory
+  tags: swpm1,swpm2,webdispatcher,hanacockpit
   file: 
     path: /usr/sap/scratch
     state: directory
 
-- name: Create SWPM folder /usr/sap/scratch/SWPM
-  tags: mkdir,create,directory
+- name: Create SWPM1 folder /usr/sap/scratch/SWPM1
+  tags: swpm1,webdispatcher
   file:
-    path: /usr/sap/scratch/SWPM
+    path: /usr/sap/scratch/SWPM1
     state: directory
+    owner: root
+    group: root
+    mode: 0777
+    recurse: yes
+
+- name: Create SWPM2 folder /usr/sap/scratch/SWPM2
+  tags: swpm2
+  file:
+    path: /usr/sap/scratch/SWPM1
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+    recurse: yes
      
 ##################################################################################
 ### Copy media files #############################################################
 ##################################################################################
-- name: Copy SWPM media
-  tags: copy,media,swpm
+- name: Copy SWPM1 media
+  tags: swpm1,webdispatcher
   copy:
-    src: ~/medias/installations/SWPM/SWPM.SAR
-    dest: /usr/sap/scratch/SWPM
+    src: ~/medias/installations/SWPM1/SWPM1.SAR
+    dest: /usr/sap/scratch/SWPM1
+    mode: 0777
+    owner: root
+    group: root
+
+- name: Copy SWPM2 media
+  tags: swpm2
+  copy:
+    src: ~/medias/installations/SWPM2/SWPM2.SAR
+    dest: /usr/sap/scratch/SWPM2
     mode: 0777
     owner: root
     group: root
 
 - name: Copy SAPCAR executable
-  tags: copy,media,sapcar
+  tags: sapcar,swpm1,swpm2,hanacockpit,webdispatcher
   copy:
-    src: ~/medias/installations/Utilities/SAPCAR
+    src: ~/medias/installations/utilities/SAPCAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root
     group: root
 
 - name: Copy SAPHostAgent
-  tags: copy,media,saphostagent
+  tags: saphostagent,swpm1,swpm2,webdispatcher
   copy: 
-    src: ~/medias/installations/SWPM/SAPHOSTAGENT.SAR
+    src: ~/medias/installations/SWPM1/SAPHOSTAGENT.SAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root
@@ -58,15 +81,26 @@
 ### Installing SWPM and CSH ######################################################
 ##################################################################################
       
-- name: Uncompress Software Provisioning Manager
-  tags: install,uncompress,swpm
+- name: Uncompress Software Provisioning Manager 1.0
+  tags: swpm1,webdispatcher
   ansible.builtin.shell:
-    cmd: /usr/sap/scratch/SAPCAR -xvf /usr/sap/scratch/SWPM/SWPM.SAR 
+    cmd: /usr/sap/scratch/SAPCAR -xvf /usr/sap/scratch/SWPM1/SWPM1.SAR -R /usr/sap/scratch/SWPM1
+
+- name: Uncompress Software Provisioning Manager 2.0
+  tags: swpm2,webdispatcher
+  ansible.builtin.shell:
+    cmd: /usr/sap/scratch/SAPCAR -xvf /usr/sap/scratch/SWPM2/SWPM2.SAR -R /usr/sap/scratch/SWPM2
 
 - name: Install CSH 
-  tags: install,csh
+  tags: suse_libraries,csh
   zypper:
     name: tcsh
+    state: latest
+
+- name: Install insserv
+  tags: suse_libraries,insserv
+  zypper:
+    name: insserv
     state: latest
 
 ##################################################################################

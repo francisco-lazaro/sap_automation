@@ -3,14 +3,16 @@
 ##################################################################################
 
 - name: Copy WebDispatcher media
+  tags: webdispatcher
   copy:
-    src: ~/medias/installations/WebDispatcher/WEBDISP.SAR
+    src: ~/medias/installations/webDispatcher/WEBDISP.SAR
     dest: /usr/sap/scratch
     mode: 0777
     owner: root
     group: root
 
 - name: Copy sapinst config file
+  tags: webdispatcher
   copy:
     src: inifile.params
     dest: /usr/sap/scratch/SWPM
@@ -19,6 +21,7 @@
     group: root
 
 - name: Copy master key file
+  tags: webdispatcher
   copy:
     src: instkey.pkey
     dest: /usr/sap/scratch/SWPM
@@ -31,6 +34,7 @@
 ##################################################################################
 
 - name: Adjust WebDispatcher SID in config file
+  tags: webdispatcher,webdispatcher_config
   lineinfile:
     path: /usr/sap/scratch/SWPM/inifile.params
     backrefs: yes
@@ -38,6 +42,7 @@
     line: NW_GetSidNoProfiles.sid = {{SID}}
 
 - name: Adjust WebDispatcher Instance in config file
+  tags: webdispatcher,webdispatcher_config
   lineinfile:
     path: /usr/sap/scratch/SWPM/inifile.params
     backrefs: yes
@@ -45,6 +50,7 @@
     line: NW_Webdispatcher_Instance.wdInstanceNumber = {{INST}}
 
 - name: Adjust WebDispatcher HTTP port
+  tags: webdispatcher,webdispatcher_config
   lineinfile:
     path: /usr/sap/scratch/SWPM/inifile.params
     backrefs: yes
@@ -52,6 +58,7 @@
     line: NW_webdispatcher_Instance.wdHTTPPort = 80{{INST}}
 
 - name: Adjust WebDispatcher HTTPS port
+  tags: webdispatcher,webdispatcher_config
   lineinfile:
     path: /usr/sap/scratch/SWPM/inifile.params
     backrefs: yes
@@ -59,6 +66,7 @@
     line: NW_webdispatcher_Instance.wdHTTPSPort = 443{{INST}}
 
 - name: Adjust WebDispatcher hostname
+  tags: webdispatcher,webdispatcher_config
   lineinfile:
     path: /usr/sap/scratch/SWPM/inifile.params
     backrefs: yes
@@ -70,6 +78,7 @@
 ##################################################################################
      
 - name: Install SAP WebDispatcher
+  tags: webdispatcher,webdispatcher_install
   ansible.builtin.shell:
     cmd: /usr/sap/scratch/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/usr/sap/scratch/SWPM/inifile.params SAPINST_EXECUTE_PRODUCT_ID='NW_Webdispatcher:NW750.IND.PD' SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
 

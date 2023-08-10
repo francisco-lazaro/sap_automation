@@ -1,0 +1,68 @@
+##################################################################################
+### Copy Hana Cockpit media & config files for installation #####################
+##################################################################################
+
+- name: Create Hana Cockpit media directory
+  tags: hanacockpit
+  file:
+    path: /usr/sap/scratch/hanacockpit
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+    recurse: yes
+
+- name: Copy Hana Cockpit media
+  tags: hanacockpit
+  copy:
+    src: ~/medias/installations/hana_cockpit/SAPHANACOCKPIT.SAR
+    dest: /usr/sap/scratch/hanacockpit
+    mode: 0777
+    owner: root
+    group: root
+
+- name: Uncompress SAP Hana Cockpit installation media
+  tags: hanacockpit,hanacockpit_uncompress
+  ansible.builtin.shell:
+    cmd: /usr/sap/scratch/SAPCAR -xvf /usr/sap/scratch/hanacockpit/SAPHANACOCKPIT.SAR -R /usr/sap/scratch/hanacockpit -manifest SIGNATURE.SMF
+
+- name: Copy hana cockpit config file
+  tags: hanacockpit,hanacockpit_config
+  copy:
+    src: auto_install.cfg
+    dest: /usr/sap/scratch/hanacockpit/HDB__LCM_LINUX_X86_64/
+    mode: 0777
+    owner: root
+    group: root
+
+- name: Copy hana cockpit config xml file
+  tags: hanacockpit,hanacockpit_config
+  copy:
+    src: passwords.xml
+    dest: /usr/sap/scratch/hanacockpit/HDB__LCM_LINUX_X86_64/
+    mode: 0777
+    owner: root
+    group: root
+
+##################################################################################
+### Install SAP Hana Cockpit #####################################################
+##################################################################################
+
+- name: Adjust hana cockpit configuration file
+  tags: hanacockpit___,hanacockpit_config___
+  lineinfile:
+    path: /usr/sap/scratch/hanacockpit/auto_install.cfg
+    backrefs: yes
+    regexp: '^(.*?)param_name(.*?)'
+    line: NW_webdispatcher_Instance.wdVirtualHostname = {{HOSTNAME}}
+    while: ansible_distribution = "ubuntu"
+
+- name: Running HDBCLM
+  tags: hanacockpit,hanacockpit_install
+  ansible.builtin.shell:
+    cmd: cat /usr/sap/scratch/hanacockpit/HDB__LCM_LINUX_X86_64/passwords.xml | /usr/sap/scratch/hanacockpit/HDB__LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --action=install --batch
+
+
+
+
+
